@@ -1,0 +1,56 @@
+{
+	"name": "d-mpdecimal",
+	"authors": [
+		"Pablo De Napoli"
+	],
+	"dependencies": {
+		"d-mpdecimal:mpdec": "*",
+		"d-mpdecimal:test_mpdec": "*",
+		"d-mpdecimal:test_decimal": "*"
+	},
+	"targetType": "none",
+	"subPackages": [
+		{
+			"name": "mpdec",
+			"targetType": "library",
+			"sourcePaths": [
+				"mpdec"
+			],
+			"importPaths": [
+				"mpdec"
+			],
+			"libs-posix": ["mpdec"]
+		},
+		{
+			"name": "test_mpdec",
+			"targetType": "executable",
+			"sourcePaths": [
+				"test_mpdec"
+			],
+			"importPaths": [
+				"test_mpdec"
+			],
+			"dependencies": {
+				"d-mpdecimal:mpdec": "*"
+			},
+			"libs-posix": ["mpdec"]
+		},
+		{
+			"name": "test_decimal",
+			"targetType": "executable",
+			"sourcePaths": [
+				"test_decimal"
+			],
+			"importPaths": [
+				"test_decimal"
+			],
+			"dependencies": {
+				"d-mpdecimal:mpdec": "*"
+			},
+			"libs-posix": ["mpdec"]
+		}
+	],
+	"description": "D wrapper for libmpdec.",
+	"copyright": "Copyright © 2021, Pablo De Napoli",
+	"license": "MIT"
+}
