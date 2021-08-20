@@ -1,4 +1,4 @@
-Error: No word lists can be found for the language "es_AR".
+
 # d-mpdecimal
 
 mpdecimal is a package for correctly-rounded arbitrary precision decimal 
