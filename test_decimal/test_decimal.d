@@ -91,7 +91,7 @@ writeln("+a=",+a);
 writeln("-a=",-a);
 perform_test("Unary -",(-a).toString=="-3.1416");
 
-perform_test("abs",abs(-a)==a);
+perform_test("abs ",decimal_abs(-a)==a);
 
 perform_test("<",(a<b)==false);
 perform_test(">",(a>b)==true);
@@ -119,6 +119,18 @@ perform_test("-- ",--m==Decimal(18));
 perform_test("--2 ",m==Decimal(18));
 perform_test("--3 ",m--==Decimal(18));
 perform_test("--4 ",m==Decimal(17));
+
+// When a variable is declared to be of type Decimal but not initializated,
+// value is a null pointer. We check that this does nos cause a segmentation fault
+
+Decimal x;
+perform_test("null",x.toString()=="null"); 
+perform_test("null1",(x+Decimal(1)).toString()=="null"); 
+perform_test("null2",(x++).toString()=="null"); 
+perform_test("null3",!x.iszero()); 
+x += Decimal(1);
+perform_test("null4",x.toString()=="null");
+
 
 writeln(passed," tests passed.");
 writeln(failed," tests failed.");

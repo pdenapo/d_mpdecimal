@@ -49,7 +49,7 @@ struct Decimal{
     mpd_t* value;
     private string name;
 
-    @disable this();
+    //@disable this();
 
     this(mpd_t* v)
     {
@@ -114,6 +114,8 @@ struct Decimal{
 
 
     bool opEquals(Decimal rhs) const {
+      if (!value || !rhs.value) 
+            return false;
        return mpd_cmp(value,rhs.value,&decimal_ctx)==0;
     }
 
@@ -123,6 +125,8 @@ struct Decimal{
     Decimal opUnary(string op)()
     {
      mpd_t* result;
+    if (!value) 
+            return this;
     static if (op == "-") 
     {
         result=mpd_new(&decimal_ctx); 
@@ -154,6 +158,8 @@ struct Decimal{
 
     Decimal opBinary(string op)(Decimal rhs)
     {
+    if (!value || !rhs.value) 
+            return this;
     mpd_t*  result= mpd_new(&decimal_ctx);
     static if (op == "+") 
     {
@@ -188,6 +194,8 @@ struct Decimal{
 
     Decimal opOpAssign(string op)(Decimal rhs)
     {
+    if (!value || !rhs.value) 
+            return this;
     static if (op == "+") 
     {
         mpd_add(value,value,rhs.value,&decimal_ctx);
@@ -219,56 +227,68 @@ struct Decimal{
         // comparison operator overloading
 
     const int opCmp(const Decimal rhs){
+        if (!value || !rhs.value) 
+            return false;
         return  mpd_cmp(value,rhs.value,&decimal_ctx); 
     }
 
     bool isfinite()
     {
-     return cast(bool) mpd_isfinite(value);
+      if (!value) return false;
+      return cast(bool) mpd_isfinite(value);
     }
 
     bool isinfinite()
     {
+      if (!value) return false;
      return cast(bool) mpd_isinfinite(value);
     }
 
     bool isnan()
     {
+      if (!value) return false;
      return cast(bool) mpd_isnan(value);
     }
 
     bool isnegative()
     {
+     if (!value) return false;
      return cast(bool) mpd_isnegative(value);
     }
 
     bool ispositive()
     {
+     if (!value) return false;
      return cast(bool) mpd_ispositive(value);
     }
 
     bool isqnan()
     {
+     if (!value) return false;
      return cast(bool) mpd_isqnan(value);
     }
 
     bool issigned()
     {
+     if (!value) return false;
      return cast(bool) mpd_issigned(value);
     }
 
     bool issnan()
     {
+     if (!value) return false;
      return cast(bool) mpd_issnan(value);
     }
 
     bool isspecial()
     {
+     if (!value) return false;
      return cast(bool) mpd_isspecial(value);
     }
 
     bool iszero()
     {
+     if (!value) return false;
      return cast(bool) mpd_iszero(value);
     }
 
@@ -283,7 +303,7 @@ struct Decimal{
     }
 }
  
- Decimal abs(Decimal x)
+ Decimal decimal_abs(Decimal x)
   {
     mpd_t* result;
     result=mpd_new(&decimal_ctx);
