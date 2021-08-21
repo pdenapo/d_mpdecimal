@@ -49,6 +49,8 @@ struct Decimal{
     mpd_t* value;
     private string name;
 
+    @disable this();
+
     this(mpd_t* v)
     {
       value=v;

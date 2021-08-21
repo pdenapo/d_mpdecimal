@@ -120,12 +120,7 @@ perform_test("--2 ",m==Decimal(18));
 perform_test("--3 ",m--==Decimal(18));
 perform_test("--4 ",m==Decimal(17));
 
-Decimal x;
-perform_test("null",x.toString()=="null"); // this should not give a seg fault!
-
 writeln(passed," tests passed.");
 writeln(failed," tests failed.");
-
-
 
 }

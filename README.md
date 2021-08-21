@@ -1,7 +1,7 @@
 
 # d-mpdecimal
 
-mpdecimal is a package for correctly-rounded arbitrary precision decimal 
+[mpdecimal](https://www.bytereef.org/mpdecimal/) is a package for correctly-rounded arbitrary precision decimal 
 floating point arithmetic writter by Stefan Krah.
 
 This project offers bindings and a wrapper for using limpdec from 
@@ -18,3 +18,11 @@ D language.
 This work is distributed under the MIT license (see the LICENSE file).
 
 Some sample test programs are also provided.
+
+This package has been only tested in GNU/Linux, and it is designed for 64 bit systems
+(Help with testing and porting is welcome).
+
+In Debian/Ubuntu you can install libmpec by installing the package
+[libmpdec-dev](https://packages.debian.org/bullseye/libmpdec-dev).
+
+
