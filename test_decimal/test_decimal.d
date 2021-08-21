@@ -89,6 +89,8 @@ writeln("+a=",+a);
 writeln("-a=",-a);
 perform_test("Unary -",(-a).toString=="-3.1416");
 
+
+
 perform_test("abs",abs(-a)==a);
 
 perform_test("<",(a<b)==false);
@@ -108,6 +110,16 @@ perform_test("% ",m%n == Decimal(2));
 
 perform_test("doble ",doble(m)==Decimal(34)); //test calling a function
 
- writeln(passed," tests passed.");
- writeln(failed," tests failed.");   
+perform_test("++ ",++m==Decimal(18));
+perform_test("++2 ",m==Decimal(18));
+perform_test("++3 ",m++==Decimal(18));
+perform_test("++4 ",m==Decimal(19));
+
+perform_test("-- ",--m==Decimal(18));
+perform_test("--2 ",m==Decimal(18));
+perform_test("--3 ",m--==Decimal(18));
+perform_test("--4 ",m==Decimal(17));
+
+writeln(passed," tests passed.");
+writeln(failed," tests failed.");   
 }
