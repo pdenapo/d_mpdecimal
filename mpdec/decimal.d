@@ -107,7 +107,6 @@ struct Decimal{
 
 
     bool opEquals(Decimal rhs) const {
-       //debug writeln("comparing ",this," and ",rhs);
        return mpd_cmp(value,rhs.value,&decimal_ctx)==0;
     }
 
@@ -117,22 +116,29 @@ struct Decimal{
     Decimal opUnary(string op)()
     {
      mpd_t* result;
-    result=mpd_new(&decimal_ctx); 
     static if (op == "-") 
     {
+        result=mpd_new(&decimal_ctx); 
         mpd_minus(result,value,&decimal_ctx);
-        //write("DEBUG result=");
-        //mpd_print(result);
+        return Decimal(result);
     }
     else static if (op == "+") 
     {
+        result=mpd_new(&decimal_ctx); 
         mpd_plus(result,value,&decimal_ctx);
+        return Decimal(result);
+    }
+    else static if (op == "++") 
+    {
+        mpd_add_i32(value, value, 1,&decimal_ctx);
+        return this;
+    }
+    else static if (op == "--") 
+    {
+        mpd_sub_i32(value, value, 1,&decimal_ctx);
+        return this;
     }
     else static assert(0, "Operator "~op~" not implemented");
-    //write("DEBUGB result=");
-    //mpd_print(result);
- 
-    return Decimal(result);
     }
 
 

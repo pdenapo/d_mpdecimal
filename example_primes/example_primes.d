@@ -19,29 +19,32 @@ void main()
 
   while (p< limit)
   {
-  p=p+Decimal(1);    
-  foreach(q;primes)
-  {
-    //writeln("q=",q);
-    if (q*q>p)
-    {
-      // if we get here p is prime
-      primes ~= Decimal(p);
-      writeln(p, " is prime");
-      count ++;
-      break;   
-    }
-    if ((p%q).iszero())
-    {
+   p++;
+   foreach(q;primes)
+   {
+        //writeln("q=",q);
+        if (q*q>p)
+        {
+            // if we get here p is prime
+            primes ~= Decimal(p);
+            writeln(p, " is prime");
+            count ++;
+            break;   
+         }
+    
+        if ((p%q).iszero())
+        {
        // if we find a divisor, p is not prime 
        break;
+        }
     }
-  }
   }
 
   //writeln(primes);
 
   // The prime counting function
   // We can compare this with the value given by Pari/Gp
+  // which for intace gives gives  primepi(10000000)= 664579
+
   writeln("primepi(",limit,")=",count);
 }
