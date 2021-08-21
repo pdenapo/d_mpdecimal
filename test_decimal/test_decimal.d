@@ -67,7 +67,9 @@ perform_test("a_to_string *",a.toString()=="3.1416");  // We test that a has not
 
 // Test +=
 Decimal g=a;
+perform_test("= ",g.toString()== a.toString());
 g += b;
+perform_test("!= ",g.toString()!= a.toString());
 writeln("g=",g);
 perform_test("+=",g.toString()=="3.1516");
 perform_test("a_to_string +=",a.toString()=="3.1416");  // We test that a has not been modified!
@@ -88,8 +90,6 @@ writeln("a=",a);
 writeln("+a=",+a);
 writeln("-a=",-a);
 perform_test("Unary -",(-a).toString=="-3.1416");
-
-
 
 perform_test("abs",abs(-a)==a);
 
@@ -120,6 +120,12 @@ perform_test("--2 ",m==Decimal(18));
 perform_test("--3 ",m--==Decimal(18));
 perform_test("--4 ",m==Decimal(17));
 
+Decimal x;
+perform_test("null",x.toString()=="null"); // this should not give a seg fault!
+
 writeln(passed," tests passed.");
-writeln(failed," tests failed.");   
+writeln(failed," tests failed.");
+
+
+
 }

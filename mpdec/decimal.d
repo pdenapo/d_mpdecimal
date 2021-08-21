@@ -56,14 +56,15 @@ struct Decimal{
 
     this(Decimal original)
     {
-      // debug writeln("Call copy constructor");
+      //debug writeln("Call copy constructor");
       value=mpd_qncopy(original.value);
     }
 
     this(this)
     {
-      // debug writeln("Calling this(this)");
-      value = mpd_qncopy(value);
+      //debug writeln("Calling this(this)");
+      if (value)
+        value = mpd_qncopy(value);
     }
 
     this(string s)
@@ -100,9 +101,13 @@ struct Decimal{
     // a string representation, used by write.
     string toString() const  
     {
-      char* s= mpd_to_eng(value, 0); // 0 = exponential in lower case
-      auto s_string = cast(string) fromStringz(s); 
-      return s_string;
+      if (value)
+      {
+        char* s= mpd_to_eng(value, 0); // 0 = exponential in lower case
+        auto s_string = cast(string) fromStringz(s); 
+        return s_string;
+      }
+      else return "null";
     }
 
 
