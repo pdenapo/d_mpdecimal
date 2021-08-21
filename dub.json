@@ -6,7 +6,8 @@
 	"dependencies": {
 		"d-mpdecimal:mpdec": "*",
 		"d-mpdecimal:test_mpdec": "*",
-		"d-mpdecimal:test_decimal": "*"
+		"d-mpdecimal:test_decimal": "*",
+		"d-mpdecimal:example_primes": "*"
 	},
 	"targetType": "none",
 	"subPackages": [
@@ -43,6 +44,20 @@
 			],
 			"importPaths": [
 				"test_decimal"
+			],
+			"dependencies": {
+				"d-mpdecimal:mpdec": "*"
+			},
+			"libs-posix": ["mpdec"]
+		},
+		{
+			"name": "example_primes",
+			"targetType": "executable",
+			"sourcePaths": [
+				"example_primes"
+			],
+			"importPaths": [
+				"example_primes"
 			],
 			"dependencies": {
 				"d-mpdecimal:mpdec": "*"

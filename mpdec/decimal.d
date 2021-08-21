@@ -35,6 +35,11 @@ SOFTWARE.
 
 mpd_context_t decimal_ctx;
 
+void init_decimal(int prec) {
+  printf("Using libmpdec version %s \n",mpd_version);
+  mpd_init(&decimal_ctx,prec);
+}
+
 void init_ieee_decimal(int bits) {
     printf("Using libmpdec version %s \n",mpd_version);
     mpd_ieee_context(&decimal_ctx, bits); 
@@ -51,7 +56,7 @@ struct Decimal{
 
     this(Decimal original)
     {
-      writeln("Call copy constructor");
+      // debug writeln("Call copy constructor");
       value=mpd_qncopy(original.value);
     }
 
