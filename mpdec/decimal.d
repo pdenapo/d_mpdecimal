@@ -202,9 +202,9 @@ struct Decimal{
     }
     else static if (op == "-") 
     {
-        write("value=");
+        // debug write("value=");
         mpd_print(value);
-        write("rhs.value=");
+        // debug write("rhs.value=");
         mpd_print(rhs.value);
         mpd_sub(value,value,rhs.value,&decimal_ctx);
     }
