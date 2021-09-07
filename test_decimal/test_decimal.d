@@ -45,25 +45,28 @@ void main()
  writeln("c=",c);
  perform_test("+",c.toString()=="3.1516");
  perform_test("a_to_string +",a.toString()=="3.1416");  // We test that a has not been modified!
+ perform_test("b_to_string +",b.toString()=="0.01"); 
 
 // Test -
 Decimal d=a-b;
 writeln("d=",d);
 perform_test("- ",d.toString()=="3.1316");
 perform_test("a_to_string -",a.toString()=="3.1416");  // We test that a has not been modified!
+perform_test("b_to_string -",b.toString()=="0.01"); 
 
 // Test *
 Decimal e=a*b;
 writeln("e=",e);
 perform_test("* ",e.toString()=="0.031416");
 perform_test("a_to_string *",a.toString()=="3.1416");  // We test that a has not been modified!
-
+perform_test("b_to_string *",b.toString()=="0.01");
 
 // Test /
 Decimal f=a/b;
 writeln("f=",f);
 perform_test("/ ",f.toString()=="314.16");
 perform_test("a_to_string *",a.toString()=="3.1416");  // We test that a has not been modified!
+perform_test("b_to_string /",b.toString()=="0.01");
 
 // Test +=
 Decimal g=a;
@@ -72,7 +75,7 @@ g += b;
 perform_test("!= ",g.toString()!= a.toString());
 writeln("g=",g);
 perform_test("+=",g.toString()=="3.1516");
-perform_test("a_to_string +=",a.toString()=="3.1416");  // We test that a has not been modified!
+perform_test("b_to_string",b.toString()=="0.01"); // We test that a has not been modified!
 
 // Test -=
 Decimal h=a;
@@ -82,7 +85,7 @@ writeln("h=",h);
 h -= b;
 writeln("h=",h);
 perform_test("-=",h.toString()=="3.1316");
-perform_test("a_to_string -=",a.toString()=="3.1416");
+perform_test("b_to_string",b.toString()=="0.01");
 
 // Test unary +
 perform_test("Unary +",a==+a);
