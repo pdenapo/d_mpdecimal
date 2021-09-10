@@ -1,13 +1,13 @@
 {
-	"name": "d_mpdecimal",
+	"name": "d-mpdecimal",
 	"authors": [
 		"Pablo De Napoli"
 	],
 	"dependencies": {
-		"d_mpdecimal:mpdec": "*",
-		"d_mpdecimal:test_mpdec": "*",
-		"d_mpdecimal:test_decimal": "*",
-		"d_mpdecimal:example_primes": "*"
+		"d-mpdecimal:mpdec": "*",
+		"d-mpdecimal:test_mpdec": "*",
+		"d-mpdecimal:test_decimal": "*",
+		"d-mpdecimal:example_primes": "*"
 	},
 	"targetType": "none",
 	"subPackages": [
@@ -20,9 +20,7 @@
 			"importPaths": [
 				"mpdec"
 			],
-			"libs-posix": [
-				"mpdec"
-			]
+			"libs-posix": ["mpdec"]
 		},
 		{
 			"name": "test_mpdec",
@@ -34,11 +32,9 @@
 				"test_mpdec"
 			],
 			"dependencies": {
-				"d_mpdecimal:mpdec": "*"
+				"d-mpdecimal:mpdec": "*"
 			},
-			"libs-posix": [
-				"mpdec"
-			]
+			"libs-posix": ["mpdec"]
 		},
 		{
 			"name": "test_decimal",
@@ -50,11 +46,9 @@
 				"test_decimal"
 			],
 			"dependencies": {
-				"d_mpdecimal:mpdec": "*"
+				"d-mpdecimal:mpdec": "*"
 			},
-			"libs-posix": [
-				"mpdec"
-			]
+			"libs-posix": ["mpdec"]
 		},
 		{
 			"name": "example_primes",
@@ -66,11 +60,9 @@
 				"example_primes"
 			],
 			"dependencies": {
-				"d_mpdecimal:mpdec": "*"
+				"d-mpdecimal:mpdec": "*"
 			},
-			"libs-posix": [
-				"mpdec"
-			]
+			"libs-posix": ["mpdec"]
 		}
 	],
 	"description": "D wrapper for libmpdec (mpdecimal), a package for correctly-rounded arbitrary precision decimal floating point arithmetic.",
