@@ -1,5 +1,5 @@
 import mpdec.decimal;
-import mpdec.mpdec;
+import mpdec.deimos;
 import std.stdio;
 
 // This is a test program computing the primes up to a given limit
