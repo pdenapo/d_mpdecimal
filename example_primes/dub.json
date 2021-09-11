@@ -1,0 +1,14 @@
+{
+	"authors": [
+		"Pablo De Napoli"
+	],
+	"copyright": "Copyright © 2021, Pablo De Napoli",
+	"description": "Find prime numbers using d-mpdecimal",
+	"license": "MIT",
+	"name": "example_primes",
+	"targetType": "executable",
+	"dependencies":
+	{
+	 "d-mpdecimal":"*"
+	}
+}

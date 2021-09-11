@@ -1,6 +1,6 @@
-module mpdec.decimal;
+module d_mpdecimal.decimal;
 
-import mpdec.deimos;
+import d_mpdecimal.deimos;
 import core.stdc.stdio:printf;
 import std.string:toStringz,fromStringz;
 import std.stdio;

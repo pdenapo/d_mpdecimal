@@ -1,4 +1,4 @@
-import mpdec.deimos;
+import d_mpdecimal.deimos;
 import core.stdc.stdio; // for printf
 
 void main()

@@ -1,7 +1,7 @@
-import mpdec.decimal;
+import d_mpdecimal.decimal;
 import std.stdio;
 
-// This is a test program for the mpdec.decimal module.
+// This is a test program for the d_mpdecimal.decimal module.
 // (C) 2021 Pablo De Nápoli
 
 int passed;

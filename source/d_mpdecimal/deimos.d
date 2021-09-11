@@ -1,4 +1,4 @@
-module mpdec.deimos;
+module d_mpdecimal.deimos;
 
 import std.stdio;
 import core.stdc.stdint;
