@@ -39,6 +39,8 @@ void main()
  perform_test("b_to_string",b.toString()=="0.01");
  writeln("b=",zero);
  perform_test("zero_to_string",zero.toString()=="0");
+ perform_test("isinteger b ",!b.isinteger);
+ 
  
  // Test +
  Decimal c=a+b;
@@ -108,6 +110,7 @@ perform_test("= ",b==other_b);
 perform_test("!= ",!(b!=other_b)); 
 
 Decimal m=Decimal(17);
+perform_test("isinteger m  ",m.isinteger);
 Decimal n=Decimal(3);
 perform_test("% ",m%n == Decimal(2));
 

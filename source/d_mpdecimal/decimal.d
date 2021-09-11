@@ -301,6 +301,11 @@ struct Decimal{
     {
       return iszero()||isnegative();   
     }
+
+    bool isinteger()
+    {
+      return cast(bool) mpd_isinteger(value);
+    }
 }
  
  Decimal decimal_abs(Decimal x)
@@ -308,5 +313,47 @@ struct Decimal{
     mpd_t* result;
     result=mpd_new(&decimal_ctx);
     mpd_abs(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+  // round-to-integral-exact
+  Decimal decimal_round_to_intx(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_round_to_intx(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+  Decimal decimal_round_to_int(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_round_to_int(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+
+  Decimal decimal_floor(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_floor(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+  Decimal decimal_ceil(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_ceil(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+  Decimal decimal_trunc(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_trunc(result,x.value,&decimal_ctx);
     return Decimal(result);        
   }
