@@ -112,6 +112,17 @@ struct Decimal{
       else return "null";
     }
 
+    // a string representation, used by write.
+    string toString(string fmt) const  
+    {
+      if (value)
+      {
+        char* s= mpd_format(value,fmt.toStringz(),&decimal_ctx); 
+        auto s_string = cast(string) fromStringz(s); 
+        return s_string;
+      }
+      else return "null";
+    }
 
     bool opEquals(Decimal rhs) const {
       if (!value || !rhs.value) 
