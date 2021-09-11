@@ -357,3 +357,46 @@ struct Decimal{
     mpd_trunc(result,x.value,&decimal_ctx);
     return Decimal(result);        
   }
+
+  Decimal decimal_exp(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_exp(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+  Decimal decimal_ln(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_ln(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+  Decimal decimal_log10(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_log10(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+  Decimal decimal_sqrt(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_sqrt(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+  // inverse-square-root
+  Decimal decimal_invroot(Decimal x)
+  {
+    mpd_t* result;
+    result=mpd_new(&decimal_ctx);
+    mpd_invroot(result,x.value,&decimal_ctx);
+    return Decimal(result);        
+  }
+
+
