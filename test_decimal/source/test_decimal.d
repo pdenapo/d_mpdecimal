@@ -123,6 +123,15 @@ perform_test("--2 ",m==Decimal(18));
 perform_test("--3 ",m--==Decimal(18));
 perform_test("--4 ",m==Decimal(17));
 
+m++;
+perform_test("++5 ",m==Decimal(18));
+++m;
+perform_test("++6 ",m==Decimal(19));
+m--;
+perform_test("--5 ",m==Decimal(18));
+--m;
+perform_test("--6 ",m==Decimal(17));
+
 // When a variable is declared to be of type Decimal but not initializated,
 // value is a null pointer. We check that this does nos cause a segmentation fault
 
