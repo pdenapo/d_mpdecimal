@@ -9,6 +9,6 @@
 	"targetType": "executable",
 	"dependencies":
 	{
-	 "d-mpdecimal":"*"
+	 "d_mpdecimal":"*"
 	}
 }
