@@ -34,7 +34,10 @@ void main()
  Decimal zero=Decimal(0);
  writeln("a=",a);
  perform_test("a_to_string",a.toString()=="3.1416");
- 
+ string a_with_format=a.format("0.3f");
+ writeln("a_with_format=",a_with_format);
+ perform_test("a_with_format",a_with_format=="3.142");
+
  writeln("b=",b);
  perform_test("b_to_string",b.toString()=="0.01");
  writeln("b=",zero);

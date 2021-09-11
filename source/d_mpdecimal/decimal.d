@@ -112,8 +112,7 @@ struct Decimal{
       else return "null";
     }
 
-    // a string representation, used by write.
-    string toString(string fmt) const  
+    string format(string fmt) const  
     {
       if (value)
       {
