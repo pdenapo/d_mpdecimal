@@ -9,10 +9,10 @@ D language.
 
 (C) 2021 by Pablo De Nápoli (pdenapo AT gmail.com)
 
-* mpdec.mpdec is a translation of the original header from C to D.
+* d_mpdecimal.deimos is a translation of the original header from C to D.
   (This allows you to call the libmpec functions from D).
 
-* mpdec.decimal is a high-level wrapper over libmpec using the
+* d_mpdecimal.decimal is a high-level wrapper over libmpec using the
   features of the D language (like structs and operator overloading).
 
 This work is distributed under the MIT license (see the LICENSE file).
