@@ -9,6 +9,6 @@
 	"targetType": "executable",
 	"dependencies":
 	{
-	 "d_mpdecimal":"*"
+	 "d_mpdecimal": {"path":"../"}
 	}
 }

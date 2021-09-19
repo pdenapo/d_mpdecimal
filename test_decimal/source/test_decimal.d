@@ -148,7 +148,19 @@ perform_test("null2",(x++).toString()=="null");
 perform_test("null3",!x.iszero()); 
 x += Decimal(1);
 perform_test("null4",x.toString()=="null");
-
+Decimal one = Decimal("1");
+perform_test("exp ",decimal_exp(zero)==one);
+perform_test("ln ",decimal_ln(one)==zero);
+Decimal ten = Decimal("10");
+perform_test("log10 ",decimal_log10(ten)==one);
+Decimal four= Decimal("4");
+Decimal two= Decimal("2");
+perform_test("sqrt ",decimal_sqrt(four)==two);
+perform_test("invsqrt ",decimal_invroot(four)==Decimal("0.5"));
+perform_test("decimal_round_to_int ",decimal_round_to_int(Decimal("1.9999"))==two);
+perform_test("decimal_floor ",decimal_floor(Decimal("1.9999"))==one);
+perform_test("decimal_ceil ",decimal_ceil(Decimal("1.9999"))==two);
+perform_test("decimal_trunc ",decimal_floor(Decimal("1.9999"))==one);
 
 writeln(passed," tests passed.");
 writeln(failed," tests failed.");
