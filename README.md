@@ -2,7 +2,7 @@
 # d-mpdecimal
 
 [mpdecimal](https://www.bytereef.org/mpdecimal/) is a package for correctly-rounded arbitrary precision decimal 
-floating point arithmetic writter by Stefan Krah.
+floating point arithmetic writter by Stefan Krah. Starting from Python-3.3, libmpdec is the basis for Python’s decimal module.
 
 This project offers bindings and a wrapper for using limpdec from 
 D language.
