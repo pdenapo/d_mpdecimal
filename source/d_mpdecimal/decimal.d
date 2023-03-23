@@ -1,11 +1,13 @@
 module d_mpdecimal.decimal;
 
 import d_mpdecimal.deimos;
-import core.stdc.stdio:printf;
-import std.string:toStringz,fromStringz;
+import core.stdc.stdint;
+import core.stdc.stdio : printf;
+import std.string : toStringz, fromStringz;
 import std.stdio;
 import core.memory;
 import core.stdc.stdlib;
+import std.format : format;
 
 /* 
 
@@ -35,378 +37,451 @@ SOFTWARE.
 
 mpd_context_t decimal_ctx;
 
-void init_decimal(int prec) {
-  printf("Using libmpdec version %s \n",mpd_version);
-  mpd_init(&decimal_ctx,prec);
+void init_decimal(int prec)
+{
+  printf("Using libmpdec version %s \n", mpd_version);
+  mpd_init(&decimal_ctx, prec);
 }
 
-void init_ieee_decimal(int bits) {
-    printf("Using libmpdec version %s \n",mpd_version);
-    mpd_ieee_context(&decimal_ctx, bits); 
+void init_ieee_decimal(int bits)
+{
+  printf("Using libmpdec version %s \n", mpd_version);
+  mpd_ieee_context(&decimal_ctx, bits);
 }
 
-struct Decimal{
-    mpd_t* value;
-    private string name;
+struct Decimal
+{
+  mpd_t* value;
+  private string name;
 
-    //@disable this();
+  //@disable this();
 
-    this(mpd_t* v)
-    {
-      value=v;
-    }
+  this(mpd_t* v)
+  {
+    value = v;
+  }
 
-    this(Decimal original)
-    {
-      //debug writeln("Call copy constructor");
-      value=mpd_qncopy(original.value);
-    }
+  this(Decimal original)
+  {
+    //debug writeln("Call copy constructor");
+    value = mpd_qncopy(original.value);
+  }
 
-    this(this)
-    {
-      //debug writeln("Calling this(this)");
-      if (value)
-        value = mpd_qncopy(value);
-    }
+  this(this)
+  {
+    //debug writeln("Calling this(this)");
+    if (value)
+      value = mpd_qncopy(value);
+  }
 
-    this(string s)
-    {
-      value=mpd_new(&decimal_ctx);
-      immutable(char)* c_string = toStringz(s); 
-      GC.addRoot(cast(void*)c_string);
-      GC.setAttr(cast(void*)c_string, GC.BlkAttr.NO_MOVE);
-      mpd_set_string(value,c_string,&decimal_ctx);
-      GC.removeRoot(cast(void*)c_string);
-      GC.clrAttr(cast(void*)c_string, GC.BlkAttr.NO_MOVE);
-    }
+  this(string s)
+  {
+    value = mpd_new(&decimal_ctx);
+    immutable(char)* c_string = toStringz(s);
+    GC.addRoot(cast(void*) c_string);
+    GC.setAttr(cast(void*) c_string, GC.BlkAttr.NO_MOVE);
+    mpd_set_string(value, c_string, &decimal_ctx);
+    GC.removeRoot(cast(void*) c_string);
+    GC.clrAttr(cast(void*) c_string, GC.BlkAttr.NO_MOVE);
+  }
 
-    this(int x)
-    {
-      value=mpd_new(&decimal_ctx);
-      mpd_set_i32(value, x, &decimal_ctx);
-    }
+  this(int x)
+  {
+    value = mpd_new(&decimal_ctx);
+    mpd_set_i32(value, x, &decimal_ctx);
+  }
 
-    this(long x)
-    {
-      value=mpd_new(&decimal_ctx);
-      mpd_set_i64(value, x, &decimal_ctx);
-    }
+  this(long x)
+  {
+    value = mpd_new(&decimal_ctx);
+    mpd_set_i64(value, x, &decimal_ctx);
+  }
 
-    ~this()
-    {
-       //debug writeln("Calling mpd_del value=",value);
-       if (value)
-          mpd_del(value);
-       value=null;   
-    }
+  ~this()
+  {
+    //debug writeln("Calling mpd_del value=",value);
+    if (value)
+      mpd_del(value);
+    value = null;
+  }
 
-    // a string representation, used by write.
-    string toString() const  
+  // a string representation, used by write.
+  string toString() const
+  {
+    if (value)
     {
-      if (value)
-      {
-        char* s= mpd_to_eng(value, 0); // 0 = exponential in lower case
-        auto s_string = cast(string) fromStringz(s); 
-        return s_string;
-      }
-      else return "null";
+      char* s = mpd_to_eng(value, 0); // 0 = exponential in lower case
+      auto s_string = cast(string) fromStringz(s);
+      return s_string;
     }
+    else
+      return "null";
+  }
 
-    string format(string fmt) const  
+  string format(string fmt) const
+  {
+    if (value)
     {
-      if (value)
-      {
-        char* s= mpd_format(value,fmt.toStringz(),&decimal_ctx); 
-        auto s_string = cast(string) fromStringz(s); 
-        return s_string;
-      }
-      else return "null";
+      char* s = mpd_format(value, fmt.toStringz(), &decimal_ctx);
+      auto s_string = cast(string) fromStringz(s);
+      return s_string;
     }
+    else
+      return "null";
+  }
 
-    bool opEquals(Decimal rhs) const {
-      if (!value || !rhs.value) 
-            return false;
-       return mpd_cmp(value,rhs.value,&decimal_ctx)==0;
-    }
+  bool opEquals(Decimal rhs) const
+  {
+    if (!value || !rhs.value)
+      return false;
+    return mpd_cmp(value, rhs.value, &decimal_ctx) == 0;
+  }
 
+  // unary operator overloading
 
-    // unary operator overloading
+  Decimal opUnary(string op)()
+  {
+    mpd_t* result;
+    if (!value)
+      return this;
+    static if (op == "-")
+    {
+      result = mpd_new(&decimal_ctx);
+      mpd_minus(result, value, &decimal_ctx);
+      return Decimal(result);
+    }
+    else static if (op == "+")
+    {
+      result = mpd_new(&decimal_ctx);
+      mpd_plus(result, value, &decimal_ctx);
+      return Decimal(result);
+    }
+    else static if (op == "++")
+    {
+      mpd_add_i32(value, value, 1, &decimal_ctx);
+      return this;
+    }
+    else static if (op == "--")
+    {
+      mpd_sub_i32(value, value, 1, &decimal_ctx);
+      return this;
+    }
+    else
+      static assert(0, "Operator " ~ op ~ " not implemented");
+  }
 
-    Decimal opUnary(string op)()
-    {
-     mpd_t* result;
-    if (!value) 
-            return this;
-    static if (op == "-") 
-    {
-        result=mpd_new(&decimal_ctx); 
-        mpd_minus(result,value,&decimal_ctx);
-        return Decimal(result);
-    }
-    else static if (op == "+") 
-    {
-        result=mpd_new(&decimal_ctx); 
-        mpd_plus(result,value,&decimal_ctx);
-        return Decimal(result);
-    }
-    else static if (op == "++") 
-    {
-        mpd_add_i32(value, value, 1,&decimal_ctx);
-        return this;
-    }
-    else static if (op == "--") 
-    {
-        mpd_sub_i32(value, value, 1,&decimal_ctx);
-        return this;
-    }
-    else static assert(0, "Operator "~op~" not implemented");
-    }
+  // binary operator overloading
 
+  Decimal opBinary(string op)(Decimal rhs)
+  {
+    if (!value || !rhs.value)
+      return this;
+    mpd_t* result = mpd_new(&decimal_ctx);
+    static if (op == "+")
+    {
+      mpd_add(result, value, rhs.value, &decimal_ctx);
+    }
+    else static if (op == "-")
+    {
+      mpd_sub(result, value, rhs.value, &decimal_ctx);
+    }
+    else static if (op == "*")
+    {
+      mpd_mul(result, value, rhs.value, &decimal_ctx);
+    }
+    else static if (op == "/")
+    {
+      mpd_div(result, value, rhs.value, &decimal_ctx);
+    }
+    else static if (op == "%")
+    {
+      mpd_rem(result, value, rhs.value, &decimal_ctx);
+    }
+    else static if (op == "^^")
+    {
+      mpd_pow(result, value, rhs.value, &decimal_ctx);
+    }
+    else
+      static assert(0, "Operator " ~ op ~ " not implemented");
 
-
-    // binary operator overloading
-
-    Decimal opBinary(string op)(Decimal rhs)
-    {
-    if (!value || !rhs.value) 
-            return this;
-    mpd_t*  result= mpd_new(&decimal_ctx);
-    static if (op == "+") 
-    {
-        mpd_add(result,value,rhs.value,&decimal_ctx);
-    }
-    else static if (op == "-") 
-    {
-        mpd_sub(result,value,rhs.value,&decimal_ctx);
-    }
-    else static if (op == "*") 
-    {
-        mpd_mul(result,value,rhs.value,&decimal_ctx);
-    }
-    else static if (op == "/") 
-    {
-        mpd_div(result,value,rhs.value,&decimal_ctx);
-    }
-    else static if (op == "%") 
-    {
-        mpd_rem(result,value,rhs.value,&decimal_ctx);
-    }
-    else static if (op == "^^") 
-    {
-        mpd_pow(result,value,rhs.value,&decimal_ctx);
-    }
-    else static assert(0, "Operator "~op~" not implemented");
-    
     return Decimal(result);
-    }
+  }
 
-    // assign operator overloading
+  // assign operator overloading
 
-    Decimal opOpAssign(string op)(Decimal rhs)
+  Decimal opOpAssign(string op)(Decimal rhs)
+  {
+    if (!value || !rhs.value)
+      return this;
+    static if (op == "+")
     {
-    if (!value || !rhs.value) 
-            return this;
-    static if (op == "+") 
-    {
-        mpd_add(value,value,rhs.value,&decimal_ctx);
+      mpd_add(value, value, rhs.value, &decimal_ctx);
     }
-    else static if (op == "-") 
+    else static if (op == "-")
     {
-        // debug write("value=");
-        mpd_print(value);
-        // debug write("rhs.value=");
-        mpd_print(rhs.value);
-        mpd_sub(value,value,rhs.value,&decimal_ctx);
+      // debug write("value=");
+      mpd_print(value);
+      // debug write("rhs.value=");
+      mpd_print(rhs.value);
+      mpd_sub(value, value, rhs.value, &decimal_ctx);
     }
-    else static if (op == "/") 
+    else static if (op == "/")
     {
-        mpd_div(value,value,rhs.value,&decimal_ctx);
+      mpd_div(value, value, rhs.value, &decimal_ctx);
     }
-    else static if (op == "%") 
+    else static if (op == "%")
     {
-        mpd_rem(value,value,rhs.value,&decimal_ctx);
+      mpd_rem(value, value, rhs.value, &decimal_ctx);
     }
-    else static if (op == "^^") 
+    else static if (op == "^^")
     {
-        mpd_pow(value,value,rhs.value,&decimal_ctx);
+      mpd_pow(value, value, rhs.value, &decimal_ctx);
     }
-    else static assert(0, "opOpAssign: Operator "~op~" not implemented");   
+    else
+      static assert(0, "opOpAssign: Operator " ~ op ~ " not implemented");
     return this;
-    }
+  }
 
-        // comparison operator overloading
+  // comparison operator overloading
 
-    const int opCmp(const Decimal rhs){
-        if (!value || !rhs.value) 
-            return false;
-        return  mpd_cmp(value,rhs.value,&decimal_ctx); 
-    }
+  const int opCmp(const Decimal rhs)
+  {
+    if (!value || !rhs.value)
+      return false;
+    return mpd_cmp(value, rhs.value, &decimal_ctx);
+  }
 
-    bool isfinite()
-    {
-      if (!value) return false;
-      return cast(bool) mpd_isfinite(value);
-    }
+  bool isfinite()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_isfinite(value);
+  }
 
-    bool isinfinite()
-    {
-      if (!value) return false;
-     return cast(bool) mpd_isinfinite(value);
-    }
+  bool isinfinite()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_isinfinite(value);
+  }
 
-    bool isnan()
-    {
-      if (!value) return false;
-     return cast(bool) mpd_isnan(value);
-    }
+  bool isnan()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_isnan(value);
+  }
 
-    bool isnegative()
-    {
-     if (!value) return false;
-     return cast(bool) mpd_isnegative(value);
-    }
+  bool isnegative()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_isnegative(value);
+  }
 
-    bool ispositive()
-    {
-     if (!value) return false;
-     return cast(bool) mpd_ispositive(value);
-    }
+  bool ispositive()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_ispositive(value);
+  }
 
-    bool isqnan()
-    {
-     if (!value) return false;
-     return cast(bool) mpd_isqnan(value);
-    }
+  bool isqnan()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_isqnan(value);
+  }
 
-    bool issigned()
-    {
-     if (!value) return false;
-     return cast(bool) mpd_issigned(value);
-    }
+  bool issigned()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_issigned(value);
+  }
 
-    bool issnan()
-    {
-     if (!value) return false;
-     return cast(bool) mpd_issnan(value);
-    }
+  bool issnan()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_issnan(value);
+  }
 
-    bool isspecial()
-    {
-     if (!value) return false;
-     return cast(bool) mpd_isspecial(value);
-    }
+  bool isspecial()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_isspecial(value);
+  }
 
-    bool iszero()
-    {
-     if (!value) return false;
-     return cast(bool) mpd_iszero(value);
-    }
+  bool iszero()
+  {
+    if (!value)
+      return false;
+    return cast(bool) mpd_iszero(value);
+  }
 
-    bool is_nonnegative()
-    {
-      return iszero() ||ispositive() ;   
-    }
+  bool is_nonnegative()
+  {
+    return iszero() || ispositive();
+  }
 
-    bool is_nonpositive()
-    {
-      return iszero()||isnegative();   
-    }
+  bool is_nonpositive()
+  {
+    return iszero() || isnegative();
+  }
 
-    bool isinteger()
-    {
-      return cast(bool) mpd_isinteger(value);
-    }
+  bool isinteger()
+  {
+    return cast(bool) mpd_isinteger(value);
+  }
 }
- 
- Decimal decimal_abs(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_abs(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
 
-  // round-to-integral-exact
-  Decimal decimal_round_to_intx(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_round_to_intx(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+Decimal decimal_abs(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_abs(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
-  Decimal decimal_round_to_int(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_round_to_int(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+// round-to-integral-exact
+Decimal decimal_round_to_intx(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_round_to_intx(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
+Decimal decimal_round_to_int(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_round_to_int(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
-  Decimal decimal_floor(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_floor(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+Decimal decimal_floor(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_floor(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
-  Decimal decimal_ceil(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_ceil(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+Decimal decimal_ceil(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_ceil(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
-  Decimal decimal_trunc(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_trunc(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+Decimal decimal_trunc(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_trunc(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
-  Decimal decimal_exp(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_exp(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+Decimal decimal_exp(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_exp(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
-  Decimal decimal_ln(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_ln(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+Decimal decimal_ln(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_ln(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
-  Decimal decimal_log10(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_log10(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+Decimal decimal_log10(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_log10(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
-  Decimal decimal_sqrt(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_sqrt(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+Decimal decimal_sqrt(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_sqrt(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
-  // inverse-square-root
-  Decimal decimal_invroot(Decimal x)
-  {
-    mpd_t* result;
-    result=mpd_new(&decimal_ctx);
-    mpd_invroot(result,x.value,&decimal_ctx);
-    return Decimal(result);        
-  }
+// inverse-square-root
+Decimal decimal_invroot(Decimal x)
+{
+  mpd_t* result;
+  result = mpd_new(&decimal_ctx);
+  mpd_invroot(result, x.value, &decimal_ctx);
+  return Decimal(result);
+}
 
+void clear_status()
+{
+  mpd_qsetstatus(&decimal_ctx, 0);
+}
 
+uint32_t check_status()
+{
+  uint32_t status = mpd_getstatus(&decimal_ctx);
+  string binary_status = format("%b", status);
+  writeln("status=", binary_status, "b");
+
+  if (status & MPD_Clamped)
+    writeln("MPD_Clamped");
+
+  if (status & MPD_Conversion_syntax)
+    writeln("MPD_Conversion_syntax");
+
+  if (status & MPD_Division_by_zero)
+    writeln("MPD_Division_by_zero");
+
+  if (status & MPD_Division_impossible)
+    writeln("MPD_Division_impossible");
+
+  if (status & MPD_Division_undefined)
+    writeln("MPD_Division_undefined");
+
+  if (status & MPD_Fpu_error)
+    writeln("MPD_Fpu_error");
+
+  if (status & MPD_Inexact)
+    writeln("MPD_Inexact");
+
+  if (status & MPD_Invalid_context)
+    writeln("MPD_Invalid_context");
+
+  if (status & MPD_Invalid_operation)
+    writeln("MPD_Invalid_operation");
+
+  if (status & MPD_Malloc_error)
+    writeln("MPD_Malloc_error");
+
+  if (status & MPD_Not_implemented)
+    writeln("MPD_Not_implemented");
+
+  if (status & MPD_Overflow)
+    writeln("MPD_Overflow");
+
+  if (status & MPD_Rounded)
+    writeln("MPD_Rounded");
+
+  if (status & MPD_Subnormal)
+    writeln("MPD_Subnormal");
+
+  if (status & MPD_Underflow)
+    writeln("MPD_Underflow");
+
+  return status;
+}
