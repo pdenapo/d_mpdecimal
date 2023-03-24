@@ -219,10 +219,8 @@ struct Decimal
     }
     else static if (op == "-")
     {
-      // debug write("value=");
-      mpd_print(value);
-      // debug write("rhs.value=");
-      mpd_print(rhs.value);
+      //debug mpd_print(value);
+      // debug mpd_print(rhs.value);
       mpd_sub(value, value, rhs.value, &decimal_ctx);
     }
     else static if (op == "/")
