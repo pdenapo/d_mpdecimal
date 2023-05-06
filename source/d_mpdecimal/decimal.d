@@ -430,9 +430,15 @@ void clear_status()
   mpd_qsetstatus(&decimal_ctx, 0);
 }
 
-uint32_t check_status()
+uint32_t get_status()
 {
-  uint32_t status = mpd_getstatus(&decimal_ctx);
+  return mpd_getstatus(&decimal_ctx);
+}
+
+/// Prints and return the status flags
+uint32_t print_status()
+{
+  uint32_t status = get_status();
   string binary_status = format("%b", status);
   writeln("status=", binary_status, "b");
 
