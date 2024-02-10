@@ -335,7 +335,7 @@ struct Decimal
   }
 }
 
-Decimal decimal_abs(Decimal x)
+Decimal decimal_abs(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -344,7 +344,7 @@ Decimal decimal_abs(Decimal x)
 }
 
 // round-to-integral-exact
-Decimal decimal_round_to_intx(Decimal x)
+Decimal decimal_round_to_intx(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -352,7 +352,7 @@ Decimal decimal_round_to_intx(Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_round_to_int(Decimal x)
+Decimal decimal_round_to_int(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -360,7 +360,7 @@ Decimal decimal_round_to_int(Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_floor(Decimal x)
+Decimal decimal_floor(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -368,7 +368,7 @@ Decimal decimal_floor(Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_ceil(Decimal x)
+Decimal decimal_ceil(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -376,7 +376,7 @@ Decimal decimal_ceil(Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_trunc(Decimal x)
+Decimal decimal_trunc(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -384,7 +384,7 @@ Decimal decimal_trunc(Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_exp(Decimal x)
+Decimal decimal_exp(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -392,7 +392,7 @@ Decimal decimal_exp(Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_ln(Decimal x)
+Decimal decimal_ln(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -400,7 +400,7 @@ Decimal decimal_ln(Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_log10(Decimal x)
+Decimal decimal_log10(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -408,7 +408,7 @@ Decimal decimal_log10(Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_sqrt(Decimal x)
+Decimal decimal_sqrt(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -417,7 +417,7 @@ Decimal decimal_sqrt(Decimal x)
 }
 
 // inverse-square-root
-Decimal decimal_invroot(Decimal x)
+Decimal decimal_invroot(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
