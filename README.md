@@ -30,4 +30,5 @@ When creating a new release, use git tag like this:
 
 ```
 git tag v0.5.3
+git push origin --tags
 ```

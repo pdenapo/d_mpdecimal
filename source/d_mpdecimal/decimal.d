@@ -242,94 +242,94 @@ struct Decimal
 
   // comparison operator overloading
 
-  const int opCmp(const Decimal rhs)
+  int opCmp(const Decimal rhs) const
   {
     if (!value || !rhs.value)
       return false;
     return mpd_cmp(value, rhs.value, &decimal_ctx);
   }
 
-  bool isfinite()
+  bool isfinite() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isfinite(value);
   }
 
-  bool isinfinite()
+  bool isinfinite() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isinfinite(value);
   }
 
-  bool isnan()
+  bool isnan() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isnan(value);
   }
 
-  bool isnegative()
+  bool isnegative() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isnegative(value);
   }
 
-  bool ispositive()
+  bool ispositive() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_ispositive(value);
   }
 
-  bool isqnan()
+  bool isqnan() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isqnan(value);
   }
 
-  bool issigned()
+  bool issigned() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_issigned(value);
   }
 
-  bool issnan()
+  bool issnan() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_issnan(value);
   }
 
-  bool isspecial()
+  bool isspecial() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isspecial(value);
   }
 
-  bool iszero()
+  bool iszero() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_iszero(value);
   }
 
-  bool is_nonnegative()
+  bool is_nonnegative() const 
   {
     return iszero() || ispositive();
   }
 
-  bool is_nonpositive()
+  bool is_nonpositive() const 
   {
     return iszero() || isnegative();
   }
 
-  bool isinteger()
+  bool isinteger() const 
   {
     return cast(bool) mpd_isinteger(value);
   }
