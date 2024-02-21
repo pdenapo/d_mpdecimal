@@ -37,13 +37,13 @@ SOFTWARE.
 
 mpd_context_t decimal_ctx;
 
-void init_decimal(int prec)
+@trusted void init_decimal(int prec)
 {
   printf("Using libmpdec version %s \n", mpd_version);
   mpd_init(&decimal_ctx, prec);
 }
 
-void init_ieee_decimal(int bits)
+@trusted void init_ieee_decimal(int bits)
 {
   printf("Using libmpdec version %s \n", mpd_version);
   mpd_ieee_context(&decimal_ctx, bits);
@@ -61,20 +61,20 @@ struct Decimal
     value = v;
   }
 
-  this(Decimal original)
+  @trusted this(Decimal original)
   {
     //debug writeln("Call copy constructor");
     value = mpd_qncopy(original.value);
   }
 
-  this(this)
+  @trusted this(this)
   {
     //debug writeln("Calling this(this)");
     if (value)
       value = mpd_qncopy(value);
   }
 
-  this(string s)
+  @trusted this(string s)
   {
     value = mpd_new(&decimal_ctx);
     immutable(char)* c_string = toStringz(s);
@@ -85,19 +85,19 @@ struct Decimal
     GC.clrAttr(cast(void*) c_string, GC.BlkAttr.NO_MOVE);
   }
 
-  this(int x)
+  @trusted this(int x)
   {
     value = mpd_new(&decimal_ctx);
     mpd_set_i32(value, x, &decimal_ctx);
   }
 
-  this(long x)
+  @trusted this(long x)
   {
     value = mpd_new(&decimal_ctx);
     mpd_set_i64(value, x, &decimal_ctx);
   }
 
-  ~this()
+  @trusted ~this()
   {
     //debug writeln("Calling mpd_del value=",value);
     if (value)
@@ -106,7 +106,7 @@ struct Decimal
   }
 
   // a string representation, used by write.
-  string toString() const
+  @trusted string toString() const
   {
     if (value)
     {
@@ -118,7 +118,7 @@ struct Decimal
       return "null";
   }
 
-  string format(string fmt) const
+  @trusted string format(string fmt) const
   {
     if (value)
     {
@@ -130,7 +130,7 @@ struct Decimal
       return "null";
   }
 
-  bool opEquals(Decimal rhs) const
+  @trusted bool opEquals(Decimal rhs) const
   {
     if (!value || !rhs.value)
       return false;
@@ -139,7 +139,7 @@ struct Decimal
 
   // unary operator overloading
 
-  Decimal opUnary(string op)()
+  @trusted Decimal opUnary(string op)()
   {
     mpd_t* result;
     if (!value)
@@ -172,7 +172,7 @@ struct Decimal
 
   // binary operator overloading
 
-  Decimal opBinary(string op)(Decimal rhs)
+  @trusted Decimal opBinary(string op)(Decimal rhs)
   {
     if (!value || !rhs.value)
       return this;
@@ -209,7 +209,7 @@ struct Decimal
 
   // assign operator overloading
 
-  Decimal opOpAssign(string op)(Decimal rhs)
+  @trusted Decimal opOpAssign(string op)(Decimal rhs)
   {
     if (!value || !rhs.value)
       return this;
@@ -242,100 +242,100 @@ struct Decimal
 
   // comparison operator overloading
 
-  int opCmp(const Decimal rhs) const
+  @trusted int opCmp(const Decimal rhs) const
   {
     if (!value || !rhs.value)
       return false;
     return mpd_cmp(value, rhs.value, &decimal_ctx);
   }
 
-  bool isfinite() const 
+ @trusted bool isfinite() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isfinite(value);
   }
 
-  bool isinfinite() const 
+  @trusted bool isinfinite() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isinfinite(value);
   }
 
-  bool isnan() const 
+  @trusted bool isnan() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isnan(value);
   }
 
-  bool isnegative() const 
+  @trusted bool isnegative() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isnegative(value);
   }
 
-  bool ispositive() const 
+  @trusted bool ispositive() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_ispositive(value);
   }
 
-  bool isqnan() const 
+  @trusted bool isqnan() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isqnan(value);
   }
 
-  bool issigned() const 
+  @trusted bool issigned() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_issigned(value);
   }
 
-  bool issnan() const 
+  @trusted bool issnan() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_issnan(value);
   }
 
-  bool isspecial() const 
+  @trusted bool isspecial() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_isspecial(value);
   }
 
-  bool iszero() const 
+  @trusted bool iszero() const 
   {
     if (!value)
       return false;
     return cast(bool) mpd_iszero(value);
   }
 
-  bool is_nonnegative() const 
+  @trusted bool is_nonnegative() const 
   {
     return iszero() || ispositive();
   }
 
-  bool is_nonpositive() const 
+  @trusted bool is_nonpositive() const 
   {
     return iszero() || isnegative();
   }
 
-  bool isinteger() const 
+  @trusted bool isinteger() const 
   {
     return cast(bool) mpd_isinteger(value);
   }
 }
 
-Decimal decimal_abs(const Decimal x)
+@trusted Decimal decimal_abs(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -344,7 +344,7 @@ Decimal decimal_abs(const Decimal x)
 }
 
 // round-to-integral-exact
-Decimal decimal_round_to_intx(const Decimal x)
+@trusted Decimal decimal_round_to_intx(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -352,7 +352,7 @@ Decimal decimal_round_to_intx(const Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_round_to_int(const Decimal x)
+@trusted Decimal decimal_round_to_int(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -360,7 +360,7 @@ Decimal decimal_round_to_int(const Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_floor(const Decimal x)
+@trusted Decimal decimal_floor(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -368,7 +368,7 @@ Decimal decimal_floor(const Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_ceil(const Decimal x)
+@trusted Decimal decimal_ceil(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -376,7 +376,7 @@ Decimal decimal_ceil(const Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_trunc(const Decimal x)
+@trusted Decimal decimal_trunc(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -384,7 +384,7 @@ Decimal decimal_trunc(const Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_exp(const Decimal x)
+@trusted Decimal decimal_exp(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -392,7 +392,7 @@ Decimal decimal_exp(const Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_ln(const Decimal x)
+@trusted Decimal decimal_ln(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -400,7 +400,7 @@ Decimal decimal_ln(const Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_log10(const Decimal x)
+@trusted Decimal decimal_log10(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -408,7 +408,7 @@ Decimal decimal_log10(const Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_sqrt(const Decimal x)
+@trusted Decimal decimal_sqrt(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -417,7 +417,7 @@ Decimal decimal_sqrt(const Decimal x)
 }
 
 // inverse-square-root
-Decimal decimal_invroot(const Decimal x)
+@trusted Decimal decimal_invroot(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
@@ -425,18 +425,18 @@ Decimal decimal_invroot(const Decimal x)
   return Decimal(result);
 }
 
-void clear_status()
+@trusted void clear_status()
 {
   mpd_qsetstatus(&decimal_ctx, 0);
 }
 
-uint32_t get_status()
+@trusted uint32_t get_status()
 {
   return mpd_getstatus(&decimal_ctx);
 }
 
 /// Prints and return the status flags
-uint32_t print_status()
+@trusted uint32_t print_status()
 {
   uint32_t status = get_status();
   string binary_status = format("%b", status);
