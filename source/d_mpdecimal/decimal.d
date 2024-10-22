@@ -118,7 +118,7 @@ struct Decimal
       return "null";
   }
 
-  string format(string fmt) const
+  string format(const string fmt) const
   {
     if (value)
     {
@@ -130,7 +130,7 @@ struct Decimal
       return "null";
   }
 
-  bool opEquals(Decimal rhs) const
+  bool opEquals(const Decimal rhs) const
   {
     if (!value || !rhs.value)
       return false;
@@ -172,7 +172,7 @@ struct Decimal
 
   // binary operator overloading
 
-  Decimal opBinary(string op)(Decimal rhs)
+  Decimal opBinary(string op)(const Decimal rhs)
   {
     if (!value || !rhs.value)
       return this;
@@ -209,7 +209,7 @@ struct Decimal
 
   // assign operator overloading
 
-  Decimal opOpAssign(string op)(Decimal rhs)
+  Decimal opOpAssign(string op)(const Decimal rhs)
   {
     if (!value || !rhs.value)
       return this;
@@ -384,7 +384,7 @@ Decimal decimal_trunc(const Decimal x)
   return Decimal(result);
 }
 
-Decimal decimal_exp(const Decimal x)
+Decimal decimal_exp(const Decimal x) 
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
