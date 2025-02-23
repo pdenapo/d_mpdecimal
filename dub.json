@@ -1,17 +1,21 @@
 {
-	"name": "d_mpdecimal",
-	"description":"Bindings and a wrapper for using limpdec, a package for correctly-rounded arbitrary precision decimal floating point arithmetic.",
 	"authors": [
 		"Pablo De Napoli"
 	],
-	"targetType": "library",
+	"dependencies": {
+		"silly": "~>1.1.1"
+	},
+	"description": "Bindings and a wrapper for using limpdec, a package for correctly-rounded arbitrary precision decimal floating point arithmetic.",
+	"importPaths": [
+		"source"
+	],
+	"libs-posix": [
+		"mpdec"
+	],
+	"license": "MIT",
+	"name": "d_mpdecimal",
 	"sourcePaths": [
 		"source"
-			],
-	"importPaths": [
-			"source"
-			],
-	"libs-posix": ["mpdec"],
-	"license": "MIT"
+	],
+	"targetType": "library"
 }
-

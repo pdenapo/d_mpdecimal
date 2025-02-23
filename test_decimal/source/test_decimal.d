@@ -29,7 +29,7 @@ Decimal doble(Decimal x)
 
 void main()
 {
-  init_ieee_decimal(128);
+  init_decimal(128);
   Decimal a = Decimal("3.1416");
   print_status();
   Decimal b = Decimal("0.01");

@@ -7,6 +7,7 @@ import std.string : toStringz, fromStringz;
 import std.stdio;
 import core.memory;
 import core.stdc.stdlib;
+import core.stdc.stdio:printf;
 import std.format : format;
 
 /* 
@@ -40,13 +41,8 @@ mpd_context_t decimal_ctx;
 void init_decimal(int prec)
 {
   printf("Using libmpdec version %s \n", mpd_version);
-  mpd_init(&decimal_ctx, prec);
-}
-
-void init_ieee_decimal(int bits)
-{
-  printf("Using libmpdec version %s \n", mpd_version);
-  mpd_ieee_context(&decimal_ctx, bits);
+  mpd_ieee_context(&decimal_ctx, prec);
+  //mpd_init(&decimal_ctx, prec);
 }
 
 struct Decimal
