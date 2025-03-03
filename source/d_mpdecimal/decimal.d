@@ -7,7 +7,7 @@ import std.string : toStringz, fromStringz;
 import std.stdio;
 import core.memory;
 import core.stdc.stdlib;
-import core.stdc.stdio:printf;
+import core.stdc.stdio : printf;
 import std.format : format;
 
 /* 
@@ -38,11 +38,11 @@ SOFTWARE.
 
 mpd_context_t decimal_ctx;
 
-void init_decimal(int prec)
+void init_decimal(int prec, bool verbose = false)
 {
-  printf("Using libmpdec version %s \n", mpd_version);
+  if (verbose)
+    printf("Using libmpdec version %s \n", mpd_version);
   mpd_ieee_context(&decimal_ctx, prec);
-  //mpd_init(&decimal_ctx, prec);
 }
 
 struct Decimal
@@ -245,87 +245,87 @@ struct Decimal
     return mpd_cmp(value, rhs.value, &decimal_ctx);
   }
 
-  @trusted bool isfinite() const 
+  @trusted bool isfinite() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_isfinite(value);
   }
 
-  @trusted bool isinfinite() const 
+  @trusted bool isinfinite() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_isinfinite(value);
   }
 
-  @trusted bool isnan() const 
+  @trusted bool isnan() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_isnan(value);
   }
 
-  @trusted bool isnegative() const 
+  @trusted bool isnegative() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_isnegative(value);
   }
 
-  @trusted bool ispositive() const 
+  @trusted bool ispositive() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_ispositive(value);
   }
 
-  @trusted bool isqnan() const 
+  @trusted bool isqnan() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_isqnan(value);
   }
 
-  @trusted bool issigned() const 
+  @trusted bool issigned() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_issigned(value);
   }
 
-  @trusted bool issnan() const 
+  @trusted bool issnan() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_issnan(value);
   }
 
-  @trusted bool isspecial() const 
+  @trusted bool isspecial() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_isspecial(value);
   }
 
-  @trusted bool iszero() const 
+  @trusted bool iszero() const
   {
     if (!value)
       return false;
     return cast(bool) mpd_iszero(value);
   }
 
-  @trusted bool is_nonnegative() const 
+  @trusted bool is_nonnegative() const
   {
     return iszero() || ispositive();
   }
 
-  @trusted bool is_nonpositive() const 
+  @trusted bool is_nonpositive() const
   {
     return iszero() || isnegative();
   }
 
-  @trusted bool isinteger() const 
+  @trusted bool isinteger() const
   {
     return cast(bool) mpd_isinteger(value);
   }
@@ -380,7 +380,7 @@ struct Decimal
   return Decimal(result);
 }
 
-@trusted Decimal decimal_exp(const Decimal x) 
+@trusted Decimal decimal_exp(const Decimal x)
 {
   mpd_t* result;
   result = mpd_new(&decimal_ctx);
