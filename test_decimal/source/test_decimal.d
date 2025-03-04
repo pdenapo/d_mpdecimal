@@ -42,6 +42,15 @@ void main()
 
   clear_status();
 
+  // How to check if a Decimal object has a defined value
+
+  Decimal undefined;
+  perform_test("undefined", !undefined.value);
+  print_status();
+  perform_test("a is defined", a.value !=null );
+  print_status();
+
+
   perform_test("a_to_string", a.toString() == "3.1416");
   print_status();
   string a_with_format = a.format("0.3f");
@@ -160,7 +169,7 @@ void main()
   perform_test("!a.isnegative", !a.isnegative);
   print_status();
 
-  // ojo: mpdecimal considera zero como positivo
+  // beware that mpdecimal considers zero as positive
   perform_test("zero.ispositive", zero.ispositive);
   print_status();
   perform_test("(-zero).ispositive", (-zero).ispositive);
