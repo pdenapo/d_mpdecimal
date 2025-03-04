@@ -38,11 +38,10 @@ SOFTWARE.
 
 mpd_context_t decimal_ctx;
 
-void init_decimal(int prec)
+void init_decimal(int prec,bool verbose=false)
 {
-  printf("Using libmpdec version %s \n", mpd_version);
+  if (verbose) printf("Using libmpdec version %s \n", mpd_version);
   mpd_ieee_context(&decimal_ctx, prec);
-  //mpd_init(&decimal_ctx, prec);
 }
 
 struct Decimal
