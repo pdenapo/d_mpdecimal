@@ -141,6 +141,9 @@ void main()
   print_status();
   perform_test("Unary -", (-a).toString == "-3.1416");
   print_status();
+  perform_test("-zero", -zero == zero);
+  print_status();
+
 
   perform_test("abs ", decimal_abs(-a) == a);
   print_status();
@@ -150,7 +153,21 @@ void main()
   print_status();
   perform_test("is_zero ", zero.iszero);
   print_status();
+  perform_test("a.ispositive", a.ispositive);
+  print_status();
+  perform_test("!(-a).ispositive", !(-a).ispositive);
+  print_status();
+  perform_test("!a.isnegative", !a.isnegative);
+  print_status();
 
+  // ojo: mpdecimal considera zero como positivo
+  perform_test("zero.ispositive", zero.ispositive);
+  print_status();
+  perform_test("(-zero).ispositive", (-zero).ispositive);
+  print_status();
+  perform_test("!zero.isnegative", !zero.isnegative);
+  print_status();
+ 
   perform_test("a=a ", a == a);
   print_status();
   perform_test("a=b ", !(a == b));
