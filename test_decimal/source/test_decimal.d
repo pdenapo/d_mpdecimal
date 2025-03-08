@@ -47,9 +47,8 @@ void main()
   Decimal undefined;
   perform_test("undefined", !undefined.value);
   print_status();
-  perform_test("a is defined", a.value !=null );
+  perform_test("a is defined", a.value != null);
   print_status();
-
 
   perform_test("a_to_string", a.toString() == "3.1416");
   print_status();
@@ -153,7 +152,6 @@ void main()
   perform_test("-zero", -zero == zero);
   print_status();
 
-
   perform_test("abs ", decimal_abs(-a) == a);
   print_status();
   perform_test("<", (a < b) == false);
@@ -168,6 +166,9 @@ void main()
   print_status();
   perform_test("!a.isnegative", !a.isnegative);
   print_status();
+  Decimal my_nan = Decimal("Nan");
+  perform_test("my_nan.isnan", my_nan.isnan);
+  perform_test("!a.isnan", !a.isnan);
 
   // beware that mpdecimal considers zero as positive
   perform_test("zero.ispositive", zero.ispositive);
@@ -176,7 +177,7 @@ void main()
   print_status();
   perform_test("!zero.isnegative", !zero.isnegative);
   print_status();
- 
+
   perform_test("a=a ", a == a);
   print_status();
   perform_test("a=b ", !(a == b));
